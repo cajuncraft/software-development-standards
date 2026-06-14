@@ -45,18 +45,49 @@ Claude Code may:
 
 ## 4.0 Required Workflow
 
-Before editing:
+### Session start
 
-1. Read `docs/ai-handoff/current.md` and the active lane summary.
-2. Explain the intended changes.
-3. Identify expected files to change.
-4. Describe risks and testing approach.
+1. Read `docs/ai-handoff/current.md`.
+2. Extract the active lane name from the **Active Lane:** field.
+3. Open `docs/ai-handoff/<lane>-summary.md`.
+4. Read the **Next Actions** section.
+5. Do not make code changes until Next Actions have been reviewed.
 
-After editing:
+If `docs/ai-handoff/current.md` is absent or the lane summary does not exist, stop and
+report to Glen before proceeding.
+
+### Before editing
+
+1. Explain the intended changes.
+2. Identify expected files to change.
+3. Describe risks and testing approach.
+
+### After editing
 
 1. Summarize changes and tests.
 2. Identify known issues and rollback considerations.
-3. Update handoff files (Completed Steps, Next Actions, Handoff Notes, Updated date).
+3. Update handoff files before stopping:
+   - Update **Completed Steps** in the active lane summary.
+   - Update **Next Actions** with remaining or newly identified work.
+   - Update **Handoff Notes** with context for the next session.
+   - Update the **Updated:** date.
+   - Update `docs/ai-handoff/current.md` if the active lane changed.
+
+Do not stop without updating the handoff files when code changes were made.
+
+### Engineering judgment within an approved lane
+
+Within an approved scope, Claude Code is expected to exercise independent engineering
+judgment — not just execute instructions. This includes:
+
+- Proposing a better technical approach when the approved framing is suboptimal or risky
+  (before implementing it, not after).
+- Challenging over-prescription: if a lane specifies implementation details that belong
+  to engineering judgment, flag it.
+- Stopping and escalating if executing the approved scope as written would require
+  unsafe, brittle, or technically incorrect work.
+
+Proposing a better approach is not the same as implementing it. Get direction first.
 
 ---
 

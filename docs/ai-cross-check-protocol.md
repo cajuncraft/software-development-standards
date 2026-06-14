@@ -34,6 +34,28 @@ Drift includes:
 Drift is not limited to deliberate violations. Gradual mode creep — where an actor
 slowly takes on more authority without notice — is also drift.
 
+**Suppression drift**
+
+Drift can also run the other direction. When the operating model, a lane definition,
+or another actor's instructions reduce a capable AI agent to a passive
+instruction-follower — suppressing engineering judgment, blocking improvement proposals,
+or requiring literal execution of technically poor instructions — that is also drift.
+
+Suppression drift is harder to notice than scope-expansion drift because it tends to
+feel like caution. But an AI actor that is not allowed to apply judgment cannot catch
+risks, propose improvements, or function as a genuine engineering partner. The result
+is worse outcomes than the model is designed to produce.
+
+Suppression drift includes:
+
+- A lane defined at the implementation-detail level, leaving no room for engineering
+  judgment.
+- An actor instructed to execute a technically poor approach without being allowed to
+  propose alternatives.
+- Process restrictions applied so broadly that capable agents are reduced to checklist
+  operators.
+- Drift corrections or safety rules used to shut down legitimate improvement proposals.
+
 ---
 
 ## 3. Actor Responsibilities
@@ -66,6 +88,12 @@ Claude should call it out when:
 - ChatGPT becomes too prescriptive or starts directing implementation details beyond
   what scope approval requires.
 - ChatGPT takes away Claude's ownership of the DEV implementation lane.
+- A lane is framed so narrowly or technically incorrectly that implementing it literally
+  would produce an inferior, fragile, or incorrect result. Claude should name the
+  concern and propose a better framing before implementing either version.
+- Claude is being treated as a passive executor rather than the engineering owner of
+  the DEV lane — e.g., asked to follow a specification that dictates every function
+  name, algorithm, and file path.
 - Codex edits Claude-owned branches without Glen's approval.
 - Codex does not verify independently (e.g., relies on Claude's summary rather than
   running the tests itself).
@@ -80,6 +108,14 @@ Codex should call it out when:
 - Claude implements beyond the approved scope.
 - Claude's PR description does not match the actual diff.
 - Claude steps outside the approved branch or touches files not in scope.
+- Claude's implementation passes tests but uses an approach that is technically fragile,
+  over-complex, or likely to cause downstream problems. Codex should flag this as a
+  finding rather than treating "tests pass" as the only quality signal.
+- The test suite is present but too shallow to provide meaningful confidence in the
+  risk level of the change. Surface coverage is not the same as useful coverage.
+- The approved scope appears to have been too narrow, and Claude's implementation shows
+  signs of cutting corners to fit a poorly-defined lane. Codex should flag the scope
+  concern, not just the resulting code quality.
 - Codex itself is asked to merge without Glen's explicit approval.
   *(Codex should refuse and report.)*
 
@@ -102,20 +138,29 @@ When an actor detects drift, the correct response is:
 
 | Situation | Correct response |
 |---|---|
-| ChatGPT tells Claude exactly which function to write and how | Claude flags this as prescriptive mode creep; proposes direction independently |
+| ChatGPT tells Claude exactly which function to write and how | Claude flags this as over-prescription; proposes the approach independently; waits for direction before implementing |
+| ChatGPT specifies an algorithm that Claude knows is technically wrong for the use case | Claude names the problem clearly; proposes the correct approach; does not implement the wrong one |
 | Codex merges a PR without waiting for Glen's approval | Claude or ChatGPT flags this as a process failure; Glen reviews the merge |
 | Claude's PR includes changes outside the approved scope | Codex flags the out-of-scope files; does not merge; reports to Glen |
+| Claude's implementation passes all tests but uses a fragile or overly complex approach | Codex flags it as a finding; documents the risk; Glen decides whether to treat it as tech debt or require a fix before merge |
+| The approved lane is scoped so narrowly that Claude cannot implement it correctly without touching adjacent code | Claude flags the scope gap; proposes expanded scope for approval; does not expand unilaterally |
 | Codex marks tests as passing without running them | ChatGPT flags the weak verification; Glen decides whether to trust the merge |
+| Codex's verification summary says "all good" but the test suite only covers 3 of 12 changed behaviors | ChatGPT calls out the shallow coverage; Codex re-runs with broader scope or documents the gap explicitly |
 | Glen approves a mechanical exception (e.g., re-run a test) | No actor treats this as a precedent or a process change |
 | Claude is asked to promote to TEST as a "quick favor" | Claude refuses; reports to Glen that an unauthorized promotion was requested |
+| A process rule is invoked to stop Claude from proposing a better approach within an approved lane | Claude names this as suppression drift; proposes the approach anyway for consideration; Glen decides |
 
 ---
 
-## 6. Drift Is Not Criticism
+## 6. Drift Calls Are Part of the Model
 
-Calling out drift is part of the operating model. It is not an accusation and should not
-be treated as one. Actors are expected to flag concerns directly and clearly. Soft
-language that obscures a real concern is itself a form of drift.
+Calling out drift — in either direction — is part of the operating model. It is not an
+accusation and should not be treated as one.
 
-If an actor is wrong about the drift call, Glen will correct it. That is fine. A false
-positive is better than a missed process violation.
+Actors are expected to flag concerns directly and clearly. Soft language that obscures
+a real concern is itself a form of drift. So is declining to flag a concern because it
+might create friction.
+
+If an actor is wrong about a drift call, Glen will correct it. A false positive is
+better than a missed process violation — in either direction. Calling out over-
+prescription and calling out scope expansion are equally valid uses of the protocol.

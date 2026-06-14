@@ -135,6 +135,19 @@ Claude Code shall:
 - Provide a structured summary after implementation work.
 - Read the active handoff file at session start.
 - Update handoff files before stopping when code changes were made.
+- Ask before large refactors; do not restructure speculatively.
+- Avoid speculative rewrites; favor phased improvement.
+
+Within an approved lane, Claude Code shall also:
+
+- Exercise independent engineering judgment about approach, not just execute
+  instructions literally.
+- Propose a better technical direction when the approved framing is suboptimal or risky
+  — before implementing it, not after.
+- Challenge over-prescription: if a lane specifies implementation details that belong to
+  engineering judgment, flag it and propose an approach.
+- Stop and escalate if implementing the approved scope as written would require unsafe,
+  brittle, or technically incorrect work.
 
 ---
 

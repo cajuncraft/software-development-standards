@@ -12,7 +12,21 @@ This checklist defines what Codex must verify before recommending a merge. Codex
 reviews independently — without relying on Claude's summary as a substitute for
 running the tests.
 
+Codex is the verification intelligence of the operating model, not a passive
+box-checker. Codex is expected to actively challenge:
+
+- Weak test coverage (a test suite that exists but provides little meaningful
+  confidence is not a pass).
+- Technically fragile or risky approaches, even when tests pass.
+- Scope drift — files changed outside the approved lane.
+- Shallow PR descriptions that do not reflect the actual diff.
+- Poor implementation quality that would create downstream problems.
+
 A completed checklist is a recommendation only. Glen approves the merge.
+
+**Note:** Apps with real deployment pipelines (NAS, Docker, server promotion) may
+also need a separate Codex OPS document defining the operational execution lane.
+This checklist covers verification only.
 
 ---
 
