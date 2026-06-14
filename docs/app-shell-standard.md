@@ -166,20 +166,43 @@ uses the active theme tokens.
 
 ---
 
-## 5. No External Assets
+## 5. Local-First Assets
 
-Local Cajun Craft Software web apps must not reference external CDN resources, web
-fonts, analytics scripts, or any URL that would make a network request outside the
-local machine. All CSS, JS, fonts, and images must be served locally.
+The default for Cajun Craft Software apps is local-first and privacy-conscious, with no
+accidental external dependencies:
 
-A test should verify that no `http://` or `https://` references exist in any web asset.
+- **Static shell assets should be local/self-hosted by default.** CSS, JS, fonts, and
+  images that make up the app shell should be served from the app itself.
+- **External assets and CDNs should not be used without explicit approval.** Pulling
+  in CDN-hosted libraries, web fonts, or analytics scripts is not permitted by default
+  and requires Glen's explicit approval for the app or lane.
+- **Runtime integrations and external URLs may be allowed only when explicitly approved**
+  for a specific app or lane. When an app legitimately needs to reach an external
+  service (e.g., an approved API integration), that exposure must be approved, scoped,
+  and documented — it is not an accidental dependency.
+
+The goal is to prevent *accidental* external dependencies, not to prohibit approved
+integrations. An app should never reach outside the local machine by default; it may do
+so only where Glen has explicitly approved that behavior.
+
+Where an app is intended to be fully local with no approved external calls, a test
+should verify that no unexpected `http://` or `https://` references exist in its web
+assets.
 
 ---
 
-## 6. Reference Implementation
+## 6. Reference Shell Pattern
 
-The GPB Voice Generator is the reference implementation of this standard as of VG-005.
-When the standard is updated, the Voice Generator should be updated to match.
+The GPB Voice Generator is the current reference implementation of this shell pattern
+(as of VG-005). It is a worked example of the standard, not the canonical source of
+files that every app must clone.
 
-New apps should copy or adapt the reference implementation's `shell.css`, `shell.js`,
-and `base.html` from the Voice Generator repo.
+New apps should follow or adapt the reference shell pattern. They may copy useful
+structure or styling from existing apps when appropriate, but should not be required to
+clone exact files (e.g., `shell.css`, `shell.js`, `base.html`) if the framework or app
+context differs. A Flask app, a FastAPI app, and a future app on a different stack can
+all satisfy this standard while differing in implementation.
+
+What matters is that the app honors the required and recommended shell elements in
+sections 2–4 — not that it reuses any specific file. When the standard is updated, the
+reference implementation should be updated to match so it remains a useful example.
