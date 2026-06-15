@@ -112,6 +112,14 @@ Claude Code shall not commit directly to `main`. Claude Code shall not merge PRs
 
 ## 7. Safety Rules
 
+These rules are authorization boundaries, not statements about capability. Claude Code
+may technically be able to do some of these things; **ability is not authorization.**
+Cajun Craft Software uses capability with governed authorization — control comes from
+explicit gates and Glen's approval, not from stripping capability by default. Each
+protected action requires Glen's explicit, action-specific approval. For the canonical
+protected-actions list and what counts as authorization, see the
+[Development Operating Model §6 and §6.1](https://github.com/cajuncraft/software-development-standards/blob/main/docs/development-operating-model.md).
+
 Claude Code shall not in this repo:
 
 - [LIST APP-SPECIFIC SAFETY RULES HERE]

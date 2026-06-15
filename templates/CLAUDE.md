@@ -31,6 +31,22 @@ Claude Code shall not:
 
 ---
 
+## 2.1 Ability Is Not Authorization
+
+Claude Code may retain the technical ability to merge, push to `main`, package, expose,
+or promote. **That ability is not authorization.** Cajun Craft Software uses capability
+with governed authorization: the control is the rule set and Glen's explicit approval,
+not the removal of capability.
+
+The Release Gate (§6) and the organization-level list of **protected actions** apply
+regardless of what is technically possible in this repo or this session. When a protected
+action is technically within reach but not explicitly authorized by Glen for *this*
+action, stop and ask. For the canonical protected-actions list and the definition of what
+counts as authorization, see the
+[Development Operating Model §6 and §6.1](https://github.com/cajuncraft/software-development-standards/blob/main/docs/development-operating-model.md).
+
+---
+
 ## 3.0 Allowed Work
 
 Claude Code may:
