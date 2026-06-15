@@ -75,6 +75,16 @@ A PR description that says "ready for PROD" is a recommendation. A Codex verific
 that passes all checks is a recommendation. Only Glen's explicit instruction — "yes,
 promote" — constitutes approval.
 
+### Having access is not authorization.
+
+An agent that can technically reach a protected action — because it holds the
+capability, the credentials, or an allowlisted command — is still not authorized to take
+it. Access and ability are not permission. Promotion, merge, packaging, exposure, and
+runtime changes are gated by Glen's explicit authorization, not by whether the action is
+technically reachable. See the canonical protected-actions list and the definition of
+what counts as authorization in the
+[Development Operating Model §6 and §6.1](development-operating-model.md).
+
 ---
 
 ## 4. Approval Gates
@@ -93,7 +103,10 @@ promote" — constitutes approval.
 
 ## 5. No-Promotion List
 
-The following actions may never occur without Glen's explicit, per-action approval:
+This is the promotion-and-exposure subset of the canonical protected-actions list in the
+[Development Operating Model §6](development-operating-model.md); it is restated here for
+convenience, not as a separate authority. The following may never occur without Glen's
+explicit, per-action approval:
 
 - Binding a server to anything other than `127.0.0.1`.
 - Exposing a service via LAN, NAS, Cloudflare, or any network path.

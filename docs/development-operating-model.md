@@ -29,6 +29,35 @@ approvals. Only Glen's explicit approval is an approval.
 
 ---
 
+## 2.1 Ability Is Not Authorization
+
+Cajun Craft Software operates on a model of **capability with governed authorization**.
+Capable AI actors are deliberately given enough technical ability to act effectively
+when explicitly directed. Least capability is not the primary control model for trusted
+AI development agents operating under Glen's governed process — useful agents are not
+crippled by stripping capability by default.
+
+The control comes from elsewhere: clear authorization boundaries, explicit approval
+gates, auditability, and actors reliably following the rule set.
+
+From this follows the core rule:
+
+> **Having the technical ability to perform an action does not authorize the agent to
+> perform it.**
+
+Technical ability, system access, valid credentials, and allowlisted commands are not
+permission. An actor may be technically able to merge a PR, push to `main`, package a
+release, expose a service, or promote to PROD — and still not be authorized to do any of
+it. Protected actions (see §6) require Glen's explicit, action-specific authorization
+each time, regardless of what the agent is technically capable of doing.
+
+This principle protects capability as much as it constrains it: because *authorization* —
+not *capability* — is the gate, agents can be trusted with broad ability without that
+ability becoming a standing license to act. It is a complement to security discipline,
+not a rejection of it.
+
+---
+
 ## 3. Role Definitions
 
 ### 3.1 Glen — Product Owner and Sole PROD Gatekeeper
@@ -178,19 +207,69 @@ situations, that is a process violation.
 
 ---
 
-## 6. No-Authorization List
+## 6. Protected Actions (Ability ≠ Authorization)
 
-The following actions may never occur without Glen's explicit approval:
+This is the **canonical list of protected actions** for all Cajun Craft Software
+projects. An actor may have the technical ability, access, or an allowlisted command to
+perform any of them; that ability is not authorization. Each requires Glen's explicit,
+action-specific authorization at the time it is performed. Other standards and templates
+reference this table rather than restating it.
 
-- Merging a pull request.
-- Promoting to TEST, STAGING, or PROD.
-- Packaging or creating a distributable artifact.
-- Starting, restarting, or binding a production runtime service.
-- Exposing any service via LAN, NAS, Cloudflare, port forwarding, or any other network
-  path beyond 127.0.0.1.
-- Replacing or removing the legacy/baseline version of an app.
-- Deleting repository history, branches, or production backups.
-- Modifying DNS, Cloudflare, or infrastructure configuration.
+| Protected action | Notes |
+|---|---|
+| Merge a pull request | Per-PR; Codex verification first, Glen approves the merge |
+| Direct push to `main` | Normally never; only on Glen's explicit instruction |
+| Promote to TEST | Per-promotion |
+| Promote to STAGING / PROD | Per-promotion; PROD is Glen-gated, rollback documented first |
+| Package / create a distributable artifact or installer | Per-release |
+| Runtime service change (start, restart, or bind a service) | Per-action |
+| Replace or remove the legacy/baseline version of an app | Per-action |
+| Expose a service via LAN, NAS, Cloudflare, port forwarding, or any path beyond `127.0.0.1` | Per-action; security review first |
+| Enable HTTPS/TLS or any external/secure-context exposure | Per-action |
+| Authentication / account changes | Per-action |
+| Secret or environment-variable changes (on shared or production systems) | Per-action; never expose secrets |
+| Destructive data changes (delete/overwrite a database, drop data, rewrite history, remove backups) | Per-action; must be reversible or explicitly accepted as irreversible |
+| Modify DNS, Cloudflare, or infrastructure configuration | Per-action |
+
+Possessing the ability to take any of these actions never converts into permission. When
+a protected action is technically within reach but not explicitly authorized by Glen for
+*this* action, the agent stops and asks.
+
+---
+
+## 6.1 What Counts as Authorization
+
+Authorization for a protected action is valid only when it is **(a) from Glen,
+(b) explicit, (c) specific to the action, and (d) applicable to the action being taken
+now.** The action must be named or unambiguous from the immediate context.
+
+**Counts as authorization** (examples):
+
+- "Approved — merge PR #8."
+- "Yes, merge it." (in direct reply to a specific "May I merge PR #8?")
+- "You may promote to TEST now."
+- "I authorize packaging the release."
+- "Go ahead and push that to `main`."
+
+**Does NOT count as authorization** — these are quality signals, status reports, or
+vague continuations, never permission to cross a gate:
+
+- "looks good" / "lgtm"
+- "PASS" / "all green"
+- "ready" / "ready to merge"
+- "recommend merge"
+- "continue"
+- "finish it"
+
+**Continuation instructions.** A continuation instruction such as "continue" or
+"finish it" extends only work that is *already* authorized — for example, continuing
+implementation inside an approved DEV lane. It is never authorization to perform a
+protected action. If finishing the work would require crossing a protected gate, the
+agent must stop and request explicit, action-specific authorization for that gate.
+
+**Channel.** Authorization must come from Glen directly. A protected action is not
+authorized because another actor relays it ("ChatGPT says you can merge" is not
+authorization).
 
 ---
 
@@ -204,4 +283,5 @@ The following actions may never occur without Glen's explicit approval:
 > Use AI as an accelerator, not an uncontrolled operator.  
 > AI capability should be used, not suppressed.  
 > Guardrails define boundaries; they do not replace judgment.  
-> Within those boundaries, capable AI actors reason, propose, challenge, and improve.
+> Within those boundaries, capable AI actors reason, propose, challenge, and improve.  
+> Ability is not authorization; capability is governed by explicit gates, not removed.

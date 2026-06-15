@@ -72,6 +72,10 @@ Before beginning, Codex must:
 - [ ] No Cloudflare, DNS, or network configuration is changed.
 - [ ] No promotion or deployment scripts were triggered or modified to auto-execute.
 - [ ] Rollback is possible: the previous behavior can be restored by reverting the PR.
+- [ ] No protected action (merge, push to `main`, promote, package, expose, runtime
+  change — see the canonical list in the [Development Operating Model §6](https://github.com/cajuncraft/software-development-standards/blob/main/docs/development-operating-model.md))
+  was taken or staged on the basis of technical access alone. Ability is not
+  authorization; each such action requires Glen's explicit, action-specific approval.
 
 ## Documentation
 
@@ -99,4 +103,6 @@ Before beginning, Codex must:
 - [ ] Recommend merge with notes — minor findings noted above; not blocking.
 - [ ] Do NOT recommend merge — blocking issue(s) noted above.
 
-**Merge may only proceed after Glen's explicit approval.**
+**Merge may only proceed after Glen's explicit approval.** Codex's technical ability to
+merge (e.g., via `gh pr merge`) is not authorization to merge — ability is not
+authorization.

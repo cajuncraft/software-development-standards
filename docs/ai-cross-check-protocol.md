@@ -30,6 +30,10 @@ Drift includes:
 - An actor merging, promoting, or deploying without Glen's explicit approval.
 - An actor expanding scope beyond the approved lane without a new approval.
 - An actor optimizing for appearing productive rather than for correct process.
+- An actor performing (or preparing to perform) a protected action because it was
+  *technically able to* — treating ability, access, credentials, or an allowlisted
+  command as if it were authorization. Ability is not authorization (see the
+  [Development Operating Model §2.1 and §6](development-operating-model.md)).
 
 Drift is not limited to deliberate violations. Gradual mode creep — where an actor
 slowly takes on more authority without notice — is also drift.
