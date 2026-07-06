@@ -60,11 +60,7 @@ sync tooling, no duplicated long documents.
    of the operating model it conforms to, and nothing tracks adoption.
 6. **Tooling fact:** the Codex CLI auto-loads `AGENTS.md`, not `CODEX.md`.
    A new `CODEX.md` that nothing points to would be invisible to Codex.
-7. **Housekeeping:** the local standards-repo checkout was parked on a
-   stale merged branch, and an untracked `.codex/pr28review/` scratch
-   directory (Storyteller PR-28 review artifacts) is sitting in this repo's
-   working tree — wrong repo, local-only, should be deleted by its owner.
-8. **What is already right and should not move:** Storyteller `CLAUDE.md`
+7. **What is already right and should not move:** Storyteller `CLAUDE.md`
    §6.1/§6.2 (single-use TEST/PROD release exceptions) is repo-specific
    execution governance — exactly the kind of content that must stay local.
    The Development Operating Model, Cross-Check Protocol, and the
@@ -301,17 +297,16 @@ refuse to recommend implementation lanes for a repo missing them.
    (accepting the manual-table trade-off over sync tooling).
 5. **Adoption sequence and lane numbering** in §10, including one small
    governance-sync lane per app repo.
-6. Housekeeping (no approval needed, flagged for awareness): the untracked
-   `.codex/pr28review/` scratch directory in this repo's local checkout
-   should be deleted by whoever owns it; it is not committed.
 
 ---
 
 ## 12. Validation Statement
 
 This proposal was checked against every governance file listed in §2.1 as it
-exists today. The §2.2 findings are the complete list of conflicts, gaps,
-and obsolete assumptions found. Nothing here modifies the HI-056 PR, any
+exists today. The §2.2 findings are the material conflicts, gaps, and
+obsolete assumptions identified during this review; they reflect the
+evidence inspected, not a claim of exhaustive coverage beyond it. Nothing
+here modifies the HI-056 PR, any
 application behavior, or any infrastructure; no repository is created; all
 changes described are future docs lanes gated on Glen's approval of this
 document.
