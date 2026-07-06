@@ -3,7 +3,14 @@
 > **Template:** Copy this file to the root of a new Cajun Craft Software app repo.
 > Replace all `[PLACEHOLDER]` values with app-specific details.
 > This template implements the standards defined in
-> `cajuncraft/software-development-standards`.
+> `cajuncraft/software-development-standards`. Claude's role, startup
+> expectations, and lane boundaries are defined canonically in the
+> [Development Operating Model](https://github.com/cajuncraft/software-development-standards/blob/main/docs/development-operating-model.md)
+> (§3.3, §9.2); this file adds only what is specific to this repository.
+>
+> **Template-Version:** 1.0
+
+**Instantiates:** `templates/CLAUDE.md` v1.0
 
 ---
 
@@ -142,8 +149,17 @@ Only Glen approves:
 
 ---
 
-## 8.0 Standards Reference
+## 8.0 Governance Files and Authority Order
 
-This repo follows:
+This repo's role files: `ChatGPT.md` (ChatGPT), this file (Claude Code),
+`CODEX.md` (Codex), `AGENTS.md` (agent-tooling entry pointer). Role behavior is
+defined canonically in
+[cajuncraft/software-development-standards](https://github.com/cajuncraft/software-development-standards);
+these files carry only repo-local identity, safety rules, and deviations.
 
-- [Cajun Craft Software Development Standards](https://github.com/cajuncraft/software-development-standards)
+On conflicting guidance, the authority order is Operating Model §8.3 —
+Glen's explicit instruction, then this repo's safety rules, then the canonical
+standards, then role-file guidance, then the active lane prompt. Flag conflicts
+to Glen; do not silently resolve them. Claude's own verification evidence
+supports a PR but never substitutes for Codex's independent review, and a lane
+prompt can narrow scope but never widen authority.

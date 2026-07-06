@@ -1,9 +1,12 @@
 # AI Working Agreement — [APP NAME]
 
-> **Template:** Copy this file to the root of a new Cajun Craft Software app repo.
-> Replace all `[PLACEHOLDER]` values with app-specific details.
-> This template implements the standards defined in
-> `cajuncraft/software-development-standards`.
+> **DEPRECATED (CCS-003/CCS-004):** Do not copy this template into new repos.
+> Its role definitions are superseded by the role-file set — `ChatGPT.md`,
+> `CLAUDE.md`, `CODEX.md`, `AGENTS.md` — and the canonical
+> [Development Operating Model](https://github.com/cajuncraft/software-development-standards/blob/main/docs/development-operating-model.md).
+> Existing repo instances are slimmed to identity + pointer (or retired) during
+> their governance-sync adoption lanes. Retained here for reference until
+> adoption completes.
 
 ---
 
