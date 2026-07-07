@@ -4,10 +4,12 @@ This repository is the organization-level source of truth for Cajun Craft Softwa
 development standards, AI operating model, product design principles, and default
 app shell expectations.
 
-Standards and templates are versioned; see [CHANGELOG.md](CHANGELOG.md) and the
-`Standard-Version` / `Template-Version` headers in each file. Policy changes
-happen only in this repository — never as edits to an app repo's local copy
-(Operating Model §8.4).
+The canonical standards and the role-file templates are versioned; see
+[CHANGELOG.md](CHANGELOG.md) and the `Standard-Version` / `Template-Version`
+headers in those files. The handoff templates are unversioned structural
+scaffolding — their instances are per-lane working files, not governance
+documents. Policy changes happen only in this repository — never as edits to
+an app repo's local copy (Operating Model §8.4).
 
 ## Contents
 
@@ -35,8 +37,8 @@ the local copies carry only app identity, safety rules, and deviations.
 | [CLAUDE.md](templates/CLAUDE.md) | Claude Code | App safety rules, workflow, branch rules, release gate |
 | [CODEX.md](templates/CODEX.md) | Codex | App-specific review checks, test command, report format |
 | [AGENTS.md](templates/AGENTS.md) | Agent tooling | Compatibility entry pointer + ground rules |
-| [docs/ai-handoff/current.md](templates/docs/ai-handoff/current.md) | all | Active lane pointer file |
-| [docs/ai-handoff/lane-summary-template.md](templates/docs/ai-handoff/lane-summary-template.md) | all | Lane summary file template |
+| [docs/ai-handoff/current.md](templates/docs/ai-handoff/current.md) | all | Active lane pointer file *(unversioned scaffolding)* |
+| [docs/ai-handoff/lane-summary-template.md](templates/docs/ai-handoff/lane-summary-template.md) | all | Lane summary file template *(unversioned scaffolding)* |
 
 Deprecated: [AI_WORKING_AGREEMENT.md](templates/AI_WORKING_AGREEMENT.md) — superseded
 by the role-file set; not for new repos. `CODEX_REVIEW.md` was absorbed into

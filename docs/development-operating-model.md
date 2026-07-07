@@ -380,9 +380,12 @@ above one. Ability is not authorization (§2.1, §6) binds at every layer.
 
 ### 8.4 Versioning and adoption
 
-Each canonical standard and template carries a `**Standard-Version:**` /
-`**Template-Version:**` header; each repo-local instance states which template
-version it instantiates. Policy changes happen **only in this repository** —
+Each canonical standard and each **role-file template** carries a
+`**Standard-Version:**` / `**Template-Version:**` header; each repo-local
+role-file instance states which template version it instantiates. The handoff
+templates are unversioned structural scaffolding — their instances are
+per-lane working files, and version ceremony on them would add noise, not
+safety. Policy changes happen **only in this repository** —
 never as edits to an app repo's copy. MAJOR/MINOR bumps to this document or a
 template trigger one small governance-sync docs lane per app repo; PATCH bumps
 (typo/clarity) do not. The README adoption table tracks which repo instantiates

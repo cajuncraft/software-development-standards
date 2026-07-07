@@ -1,8 +1,10 @@
 # Changelog — Cajun Craft Software Development Standards
 
-Version identity for this repository's standards and templates. Each canonical
-doc carries a `**Standard-Version:**` header and each template a
-`**Template-Version:**` header; this file records bumps.
+Version identity for this repository's standards and role-file templates. Each
+canonical doc carries a `**Standard-Version:**` header and each role-file
+template a `**Template-Version:**` header; this file records bumps. The
+handoff templates (`templates/docs/ai-handoff/`) are unversioned structural
+scaffolding by design.
 
 Bump rule (Operating Model §8.4): MAJOR/MINOR bumps to the operating model or a
 template trigger one governance-sync docs lane per adopting app repo; PATCH

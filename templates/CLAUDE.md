@@ -18,8 +18,11 @@
 
 [One paragraph describing what this app does and why it exists.]
 
-This project follows the Cajun Craft Software controlled development model. See
-`AI_WORKING_AGREEMENT.md` for the full operating agreement.
+This project follows the Cajun Craft Software controlled development model. The
+full operating agreement is the canonical
+[Development Operating Model](https://github.com/cajuncraft/software-development-standards/blob/main/docs/development-operating-model.md)
+together with this repository's role-file set — `ChatGPT.md`, this file,
+`CODEX.md`, and `AGENTS.md` (see §8.0).
 
 ---
 
