@@ -72,7 +72,7 @@ the whole mechanism.
 | `home-inventory-system` (CC-SILS) | pending | pre-1.0 (app-specific) | pending | pre-1.0 (app-specific) | pending |
 | `gpb-voice-generator` | pending | pre-1.0 (app-specific) | pending (has legacy `CODEX_REVIEW.md`) | pending | pending |
 | `gpb-storyteller` | pre-1.0 (org-generic — to be thinned) | pre-1.0 (app-specific) | pending | pre-1.0 (app-specific) | pending |
-| `cajuncraft-print-library` (CC-PL, future) | — | — | — | — | bootstraps complete at PL-001 |
+| `cajuncraft-print-library` (CC-PL) | v1.0 | v1.0 | v1.0 | v1.0 | complete — bootstrapped at PL-001 (repo created 2026-07-07 with the full role-file set + handoff structure) |
 
 Adoption PRs update their own row. "pre-1.0" marks a file that predates this
 versioned template set and is aligned during that repo's governance-sync lane.
