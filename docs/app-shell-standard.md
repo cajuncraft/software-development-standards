@@ -1,208 +1,357 @@
-# Application Shell Standard
+# Cajun Craft Software UI Shell Standard
 
-**Scope:** All Cajun Craft Software local web applications  
+**Scope:** All Cajun Craft Software local web applications
 **Maintained in:** `cajuncraft/software-development-standards`
+**Standard-Version:** 2.0 *(CCS-006 major revision; versioning introduced at 2.0 — see [CHANGELOG](../CHANGELOG.md))*
+**Companion standard:** CCS-005 — App identity and icon family (issue #7; icon-family rules live there once published)
 
 ---
 
-## 1. Purpose
+## 1. Purpose and status
 
-This document defines the required and recommended shell elements for every Cajun Craft
-Software local web application. The goal is a consistent, recognizable product identity
-across apps, while giving each app room to adapt the implementation to its own needs.
+This document defines the shared application shell for Cajun Craft Software apps:
+identity surfaces, sidebar/header layout, visual theme, About page, device icons,
+mobile behavior, legacy-name handling, required regression tests, and review gates.
+The goal is that every Cajun Craft app is immediately recognizable as family —
+same shell skeleton, same identity placement, same badges — while each product
+stays visually distinct through its own name, short code, icon glyph, and
+navigation sections.
 
-The first implementation of this standard is the GPB Voice Generator (VG-001 through
-VG-005). New apps should adopt this standard from the start, not retrofit it later.
+**Reference direction:** CC-INV (Cajun Craft Inventory) as of the HI-068 (rename +
+About + favicon), HI-070 (sidebar icon mark), and HI-071 (Apple touch icon) lanes is
+the current reference shell. It is a worked example under active refinement, not a
+frozen pixel spec: details may be tuned before broad adoption, and this standard is
+the contract, not any single file in a product repo.
+
+**Supersedes:** version 1 of this document (the VG-era shell standard). The GPB Voice
+Generator remains a valid v1-era implementation until its own adoption lane; §11 covers
+adoption sequencing. Where v1 and this version conflict (notably environment badge
+colors, §6.4), this version wins.
+
+Relationship to **CCS-005**: CCS-005 defines *what the product identity and icon family
+look like* (tile geometry, palette, glyph rules, per-product marks). This standard
+defines *where and how the shell uses them* (sidebar mark, favicon, Apple touch icon,
+About page). Shell lanes must consult both.
 
 ---
 
-## 2. Required Shell Elements
+## 2. App identity surfaces
 
-Every Cajun Craft Software local web app must include all of the following:
+### 2.1 Naming pattern
 
-### 2.1 App name
+- **Full product name:** `Cajun Craft <Product>` — e.g. `Cajun Craft Inventory`,
+  `Cajun Craft Print Library`.
+- **Short code:** `CC-<XX>` — e.g. `CC-INV`, `CC-PL`, `CC-VG`, `CC-ST`. Short codes are
+  what fits where space is tight (sidebar brand, home-screen shortcut name).
+- **Legacy/internal codename:** when a product has been renamed (e.g. CC-INV was
+  CC-SILS), the old name survives only as a documented internal codename (§8).
 
-The application's name must be clearly visible to the user — in the sidebar header,
-the browser tab title, and the About page. The name should be consistent across all
-three locations.
+### 2.2 Identity constants — single source of truth
 
-### 2.2 Vendor / byline
+Each app defines its identity once, in code, and injects it into every template
+(context processor or equivalent):
 
-Every app must display **Cajun Craft Software** as the vendor or byline. This belongs
-on the About page and is encouraged in the sidebar header or footer.
+```text
+APP_NAME             e.g. "Cajun Craft Inventory"
+APP_SHORT_NAME       e.g. "CC-INV"
+APP_LEGACY_CODENAME  e.g. "CC-SILS" (omit/None when not applicable)
+APP_VERSION          single source of truth, vMAJOR.MINOR.PATCH
+APP_ENV              DEV | TEST | PROD (from env var; unknown defaults to DEV)
+```
 
-### 2.3 Version indicator
+Templates must never hardcode the name, short code, or version outside these
+constants. (The HI-070 lesson: a hardcoded `CC` sidebar tile silently survived a
+rename.)
 
-The app version must be:
+### 2.3 Sidebar app mark (top-left)
 
-- Defined as a single source of truth in the application code (e.g., `__version__` in
-  `__init__.py` or an equivalent constant).
-- Visible on the About page.
-- Available in the status/health API endpoint where one exists.
+- The mark is the **product icon** (per CCS-005), rendered as an image — never a
+  hardcoded text tile.
+- It must be sourced from the **same asset as the browser favicon** (or the same
+  source-of-truth glyph) so the browser icon and the visible app mark cannot drift.
+- Beside the mark: the short code in bold and the version underneath, with the full
+  product name available on the brand link (e.g. `title` attribute / tooltip).
+- The brand block links to the app's home page.
 
-Version format should follow semantic versioning (`MAJOR.MINOR.PATCH`).
+### 2.4 Browser favicon
 
-### 2.4 Environment indicator: DEV / TEST / PROD
+- A source-controlled SVG favicon (`static/favicon.svg` or equivalent), linked from the
+  shell with cache-busting tied to `APP_VERSION`.
+- Design per CCS-005 (rounded dark tile, gold Cajun Craft accent, simple product glyph,
+  readable at 16 px).
 
-The active environment must be:
+### 2.5 Apple / iOS home-screen icon
 
-- Visible on every page, not just the About or Status page.
-- Shown via a badge or label in the top bar or sidebar that is distinct enough to
-  prevent confusion between environments.
-- Set from an environment variable (e.g., `APP_ENV`, `VG_ENV`); unknown or missing
-  values must default to DEV.
+- A source-controlled **180×180 PNG** `apple-touch-icon` derived from the same icon
+  source, linked with `sizes="180x180"` and cache-busting.
+- The PNG must be **full-bleed** (no transparent rounded corners): iOS composites
+  transparency over black and applies its own corner mask.
+- Include `<meta name="apple-mobile-web-app-title" content="{{ APP_SHORT_NAME }}">` so
+  the suggested shortcut name is the short code.
+- Icon binaries are committed only through an approved product lane; document the
+  regeneration method (source SVG → 180×180 render) in the lane handoff.
 
-Recommended CSS color convention:
+### 2.6 Web app manifest
 
-| Environment | Color |
+Optional. A minimal manifest is acceptable when it clearly helps (e.g. Android
+home-screen installs); a full PWA (service worker, offline) is **not** a shell
+requirement and needs its own lane.
+
+### 2.7 Version and environment display
+
+- **Version:** in the sidebar brand block (§2.3), on the About page, and in the
+  status/health surface where one exists.
+- **Environment badge:** visible on **every page** in the top bar — solid,
+  high-contrast, showing `DEV`/`TEST`/`PROD`, with a tooltip of the form
+  `Environment: <ENV> · Version <VERSION>`.
+- When a release does not bump `APP_VERSION` (e.g. a visual-only fix), the deployed
+  SHA is the build discriminator; promotion records must say so.
+
+---
+
+## 3. Layout
+
+```text
++------------+-----------------------------------------------+
+| sidebar    | top bar (~56px):                              |
+| 240px      |  [mobile menu] [page title] ...spacer...      |
+| (56px icon |  [env badge] [theme toggle]                   |
+|  rail when +-----------------------------------------------+
+|  unpinned) |                                               |
+|            |  main content (themed, flex-fill, cards)      |
+| [pin]      |                                               |
+| ...nav...  |                                               |
+| footer:    |                                               |
+| Cajun Craft|                                               |
+| Software   |                                               |
++------------+-----------------------------------------------+
+```
+
+- The **sidebar always uses dark chrome**, regardless of the content theme.
+- The content area follows the active theme tokens (§6).
+- Sidebar footer carries the vendor byline **Cajun Craft Software**.
+
+---
+
+## 4. Navigation
+
+- **Grouped nav** with small uppercase section titles (e.g. FIND / INVENTORY /
+  SYSTEM), each item an icon + label.
+- Icons come from a local inline SVG sprite (line icons, `currentColor`) — no icon
+  fonts, no CDN (§7 of v1 carried forward: local-first assets, external assets need
+  explicit approval).
+- **Active item** is visually distinct (accent background/left edge) and carries
+  `aria-current="page"`.
+- **About is the last navigation item.** Always. This is a family-recognition anchor
+  and a regression-test target.
+- Desktop: sidebar is pinnable; unpinned it collapses to an icon rail with
+  hover/focus expansion. Pin state persists in `localStorage`.
+- **Mobile (phone-width): the sidebar is a drawer, collapsed by default**, opened by
+  an obvious top-bar menu button, with a backdrop, tap-outside-to-close,
+  link-tap-to-close, and Escape-to-close.
+
+---
+
+## 5. About page
+
+Every app has an About page (last nav item) presenting, at minimum:
+
+| Field | Content |
 |---|---|
-| DEV | Teal / blue-green |
-| TEST | Amber / yellow |
-| PROD | Red |
+| Application | `APP_NAME (APP_SHORT_NAME)` with short-code chip |
+| Version | `APP_VERSION` |
+| Environment | env badge |
+| Legacy / internal codename | when applicable — see §8 wording pattern |
+| Publisher | Cajun Craft Software |
+| Copyright | `© <YEAR> Cajun Craft Software. All rights reserved.` |
+| Purpose | one short paragraph of what the app manages |
+| Help / Getting Started | section or link |
+| Runtime notes | local-only/security-boundary statement where applicable |
 
-### 2.5 About page / menu item
-
-Every app must have an About page or panel that includes:
-
-- App name
-- Vendor / byline (Cajun Craft Software)
-- Version
-- Environment
-- Copyright notice
-- Brief description of the app's purpose
-- Getting Started / Help section or link
-- Relevant local/runtime notes (e.g., "Runs locally on this machine only")
-- Security boundary statement where applicable
-
-The About item must be the **last item in the sidebar or main navigation menu** before
-any footer controls (collapse toggle, etc.).
-
-### 2.6 Copyright notice
-
-Each app must display a copyright notice on the About page:
-
-```
-© [YEAR] Cajun Craft Software. All rights reserved.
-```
-
-### 2.7 Help / Getting Started section or link
-
-Every app must include a Getting Started or Help section, either directly on the About
-page or linked from it. The minimum content is a brief explanation of what the app does
-and how to get started.
-
-### 2.8 Relevant local/runtime notes
-
-The About page must include notes relevant to the app's runtime context. For local-only
-apps, this should explain that the app runs on the local machine and is not accessible
-from other devices or the internet (unless that has been explicitly enabled by Glen).
+Operational/support notes are welcome; secrets, keys, and credential material are
+never rendered.
 
 ---
 
-## 3. Recommended Shell Elements
+## 6. Visual theme
 
-The following elements are strongly recommended and should be included unless the app's
-specific context makes them impractical.
+### 6.1 Baseline
 
-### 3.1 Consistent left sidebar navigation
+Shared **dark shell chrome** (sidebar/topbar) over a themeable content area. Apps that
+support themes offer **System / Light / Dark**, persist the choice in `localStorage`,
+and run a pre-paint script so there is no theme flash on load.
 
-Prefer a collapsible left sidebar for primary navigation. The sidebar should:
+### 6.2 Color tokens
 
-- Always use dark chrome (not themed with the content area).
-- Show the app name or logo at the top.
-- List navigation items with icons and labels.
-- Persist collapse state in `localStorage`.
-- Include the About item as the last entry before the collapse control.
+Content styling uses CSS custom properties with these canonical names (the CC-INV
+`style.css` token set is the reference):
 
-### 3.2 Consistent header / top bar
+```text
+--color-surface / --color-surface-3        panels, inset surfaces
+--color-text / --color-text-muted / --color-text-faint
+--color-border / --color-border-strong
+--color-primary / --color-primary-text     buttons
+--color-accent / --color-accent-soft       focus, active nav, highlights
+--color-ok / --color-warn / --color-danger (+ matching *-bg variants)
+```
 
-A 56px top bar is recommended, containing:
+Apps may extend the palette; they should not rename these tokens.
 
-- The current page title.
-- The theme selector (System / Light / Dark) where applicable.
-- The environment badge.
+### 6.3 Cajun Craft gold
 
-### 3.3 Status page
+The brand gold (reference value `#c9a227`, canonical definition in CCS-005) is
+reserved for **brand and icon accents** — the icon tile ring/glyph accents and
+sparing brand moments. It is not a general-purpose UI accent color.
 
-Apps that have a meaningful runtime state (server health, model load state, active
-connections, dependency versions) should include a Status page:
+### 6.4 Environment badge colors
 
-- Accessible from the sidebar.
-- Showing environment, app version, and relevant runtime/dependency versions.
-- Updated without requiring a page refresh where practical.
+Solid, white-text badges (supersedes the v1 table):
 
-### 3.4 Dark / light / system theme
-
-Local web apps should support three theme modes:
-
-| Mode | Behavior |
+| Environment | Reference color |
 |---|---|
-| System | Follows OS preference via `prefers-color-scheme` |
-| Light | Always light |
-| Dark | Always dark |
+| PROD | green (`#1b7a3d`; dark-theme `#2e9b58`) |
+| TEST | amber (`#a8762a`; dark-theme `#c08a36`) |
+| DEV | slate (`#4b566b`; dark-theme `#56627a`) |
 
-Theme choice should persist in `localStorage`. A flash-prevention script should run
-before the first CSS paint to avoid a visible theme switch on page load.
+Rationale: PROD reads as "the healthy real system", not as an alarm; TEST warns;
+DEV recedes.
+
+### 6.5 Components
+
+- **Cards:** rounded panels (`--color-surface`, 1px border) as the primary content
+  container; page = stacked cards.
+- **Buttons:** primary (filled `--color-primary`), secondary (surface + border), and
+  warn variants; shared radius token; whole-button click targets.
+- **Badges/pills:** small bold pills — status family `badge--ok / --warn / --issue /
+  --neutral / --pending / --complete` plus the solid env badges (§6.4).
+- **Radius/spacing/typography:** one pill radius and one button/card radius token;
+  `.row` (flex, wraps) and `.stack` (grid gap) utility layouts; system font stack;
+  compact scale (~0.72rem badges → ~0.95rem body → modest headings).
+- Tables collapse to labeled rows on mobile (`data-label` pattern) or an equivalent
+  responsive strategy.
 
 ---
 
-## 4. Layout Reference
+## 7. Local-first assets
 
-The recommended shell layout:
+Carried forward from v1 unchanged in substance: shell CSS/JS/fonts/images are served
+by the app itself; CDN assets, web fonts, and analytics require Glen's explicit
+approval; fully-local apps should have a check that no unexpected external URLs exist
+in web assets. Approved integrations are fine — the rule prevents *accidental*
+external dependencies.
 
+---
+
+## 8. Legacy naming and operational safety
+
+When a product's user-facing name changes:
+
+- **User-facing surfaces** (shell, titles, About, prose, exports, docs meant for
+  users) are renamed consistently in a dedicated lane.
+- **Operational identifiers are never renamed by a shell/rename lane:** repository
+  names, Docker compose/project/container/image names, database files and tables,
+  environment variables, credential/app IDs, ports, URLs, backup paths, service
+  names, API paths, and log formats. Renaming any of these requires its own
+  explicitly-approved lane.
+- The old name may deliberately survive user-facing in narrow, documented contexts
+  (e.g. CC-INV's "CC-SILS ID" label nomenclature kept for printed-label continuity).
+- Every rename PR must include a **classification of remaining old-name
+  occurrences**: intentionally operational · deliberate user-facing legacy ·
+  docs/history · missed rename (must be zero).
+- About page wording pattern: *"Legacy/internal codename: `<OLD>` — formerly the
+  app's display name. It remains in operational identifiers (…) for stability and
+  support history."*
+
+---
+
+## 9. Starter / template expectations
+
+Future apps adopt the shell as a **pattern, not a file clone** — Flask, FastAPI, or
+another stack can all comply. The starter surface every new Cajun Craft app begins
+from (bootstrap requirement, same footing as the role-file set):
+
+```text
+Cajun Craft Software App Shell
+├── base layout / sidebar / topbar pattern      (§3–4)
+├── product identity constants                  (§2.2, injected globally)
+├── shared CSS/theme tokens                     (§6)
+├── About page pattern                          (§5, last nav item)
+├── favicon + apple-touch-icon pattern          (§2.4–2.5)
+├── environment/version badges                  (§2.7)
+├── mobile sidebar behavior                     (§4)
+└── shell identity regression tests             (§10)
 ```
-+----------+---------------------------------------------+
-| sidebar  | top-bar (56px: page title, theme, env-badge)|
-| (240px / +---------------------------------------------+
-|  56px    | main content area (themed, flex-fill)       |
-| collapsed|                                             |
-|          |                                             |
-| [toggle] |                                             |
-+----------+---------------------------------------------+
+
+A product supplies only:
+
+```text
+APP_NAME · APP_SHORT_NAME · APP_LEGACY_CODENAME (if any)
+APP_ICON_SOURCE / glyph direction (per CCS-005)
+navigation sections · product-specific pages
 ```
 
-The sidebar uses dark chrome regardless of the current theme. The main content area
-uses the active theme tokens.
+Until a packaged starter exists, **CC-INV is the copy-from reference** (its
+`base.html`, `style.css` token set, About page, icon assets, and
+`tests/test_app_identity.py`). If a reusable starter package/template repo is later
+extracted, it lives under this standards repo's `templates/` or a dedicated starter
+repo via its own CCS lane.
 
 ---
 
-## 5. Local-First Assets
+## 10. Required shell regression tests
 
-The default for Cajun Craft Software apps is local-first and privacy-conscious, with no
-accidental external dependencies:
+Every product repo includes tests (or equivalent enforced checks) that:
 
-- **Static shell assets should be local/self-hosted by default.** CSS, JS, fonts, and
-  images that make up the app shell should be served from the app itself.
-- **External assets and CDNs should not be used without explicit approval.** Pulling
-  in CDN-hosted libraries, web fonts, or analytics scripts is not permitted by default
-  and requires Glen's explicit approval for the app or lane.
-- **Runtime integrations and external URLs may be allowed only when explicitly approved**
-  for a specific app or lane. When an app legitimately needs to reach an external
-  service (e.g., an approved API integration), that exposure must be approved, scoped,
-  and documented — it is not an accidental dependency.
+1. the sidebar mark is the product icon image and **not a stale generic text tile**;
+2. browser favicon metadata exists and points to a source-controlled asset;
+3. Apple touch icon metadata exists, points to a source-controlled asset, and the
+   asset is a real 180×180 PNG;
+4. app name, short code, version, and environment badge render in the shell;
+5. the About page renders the §5 identity fields (including the legacy codename note
+   when applicable);
+6. **About is the last nav item**;
+7. mobile sidebar defaults to collapsed where applicable (markup/state-level check);
+8. stale legacy names do not appear in normal user-facing UI outside the explicitly
+   allowed contexts (a sweep across representative pages with an allowlist);
+9. shell/GET rendering causes no data side effects (identity pages are read-only).
 
-The goal is to prevent *accidental* external dependencies, not to prohibit approved
-integrations. An app should never reach outside the local machine by default; it may do
-so only where Glen has explicitly approved that behavior.
-
-Where an app is intended to be fully local with no approved external calls, a test
-should verify that no unexpected `http://` or `https://` references exist in its web
-assets.
+CC-INV's `tests/test_app_identity.py` is the reference implementation of this suite.
 
 ---
 
-## 6. Reference Shell Pattern
+## 11. Review gates and adoption
 
-The GPB Voice Generator is the current reference implementation of this shell pattern
-(as of VG-005). It is a worked example of the standard, not the canonical source of
-files that every app must clone.
+### 11.1 Codex / Claude review checklist
 
-New apps should follow or adapt the reference shell pattern. They may copy useful
-structure or styling from existing apps when appropriate, but should not be required to
-clone exact files (e.g., `shell.css`, `shell.js`, `base.html`) if the framework or app
-context differs. A Flask app, a FastAPI app, and a future app on a different stack can
-all satisfy this standard while differing in implementation.
+Every new-app bootstrap, shell-change, or rename PR must be reviewed against:
 
-What matters is that the app honors the required and recommended shell elements in
-sections 2–4 — not that it reuses any specific file. When the standard is updated, the
-reference implementation should be updated to match so it remains a useful example.
+> **Does this comply with the Cajun Craft Software UI shell standard (CCS-006)?**
+
+Specifically:
+
+- [ ] identity constants are the single source of truth (no hardcoded name/code/version)
+- [ ] sidebar mark = product icon image, shared source with favicon
+- [ ] favicon + apple-touch-icon links present; assets source-controlled
+- [ ] version + env badge placement per §2.7
+- [ ] About present, complete (§5), and last in nav
+- [ ] mobile drawer behavior intact
+- [ ] theme tokens used, not renamed; gold reserved per §6.3
+- [ ] legacy-name classification included (renames) — no missed user-facing renames
+- [ ] no operational identifier renamed
+- [ ] §10 regression tests present/updated and passing
+
+Product-repo `CODEX.md` app checks should incorporate this question when the repo
+adopts the standard.
+
+### 11.2 Adoption sequencing
+
+- **CC-INV** — current reference direction (HI-068/070/071); refinements to the
+  reference happen in normal CC-INV lanes and feed back into this standard.
+- **CC-PL** — first planned adoption target, via **PL-012** (shell alignment lane in
+  `cajuncraft-print-library`), citing this standard directly.
+- **VG / ST** — later adoption lanes; v1-era shells remain acceptable until their
+  lanes run.
+- Adoption is tracked in the README adoption tracker alongside the role-file rows.
+
+Per Operating Model §8.4, this MAJOR revision triggers governance-sync/adoption
+lanes per app repo — scheduled by Glen, not automatically.

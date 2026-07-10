@@ -21,7 +21,7 @@ an app repo's local copy (Operating Model §8.4).
 | [Dev-Chat Standard](docs/dev-chat-standard.md) | How ChatGPT behaves in `Dev -` conversations: status with named uncertainty, next-actor/model recommendation, outcome-based prompts |
 | [AI Cross-Check Protocol](docs/ai-cross-check-protocol.md) | How each AI actor monitors drift and calls out process violations |
 | [Product Design Principles](docs/product-design-principles.md) | Core UX and product values for all Cajun Craft Software apps |
-| [App Shell Standard](docs/app-shell-standard.md) | Required and recommended shell elements for local web apps |
+| [UI Shell Standard](docs/app-shell-standard.md) | The Cajun Craft Software app shell: identity surfaces, layout/nav, theme tokens, About page, device icons, legacy-name safety, shell regression tests, review gates |
 | [Versioning and Environment Standard](docs/versioning-and-environment-standard.md) | How apps expose version, environment, and build identity |
 | [Release and Promotion Standard](docs/release-and-promotion-standard.md) | Promotion gates and the role of Glen as PROD gatekeeper |
 

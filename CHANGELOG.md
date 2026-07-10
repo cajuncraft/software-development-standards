@@ -12,6 +12,27 @@ bumps (typo/clarity) do not.
 
 ---
 
+## 2026-07-10 — CCS-006 (UI shell standard, issue #8)
+
+**Changed**
+
+- `docs/app-shell-standard.md` **v2.0** (versioning introduced at 2.0 — MAJOR
+  revision superseding the VG-era v1 content) — now the **Cajun Craft Software
+  UI Shell Standard**: identity constants + surfaces (sidebar mark sourced from
+  the favicon asset, SVG favicon, 180×180 full-bleed Apple touch icon,
+  optional manifest), layout/navigation (grouped nav, About last, pinnable
+  desktop sidebar, mobile drawer collapsed by default), theme tokens + badge
+  system (env badge colors now PROD green / TEST amber / DEV slate,
+  superseding v1's teal/amber/red), About page structure, legacy-name +
+  operational-safety rules with the rename classification requirement,
+  starter/template expectations, required shell regression tests, and the
+  Codex review checklist. CC-INV (post HI-068/070/071) is the reference
+  direction; CC-PL is the first planned adoption target via PL-012;
+  references CCS-005 (issue #7) for icon-family rules. MAJOR bump ⇒ per-repo
+  adoption/governance-sync lanes are expected (§8.4), scheduled by Glen.
+
+---
+
 ## 2026-07-06 — CCS-004 (implements approved CCS-003)
 
 **New**
