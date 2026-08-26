@@ -67,15 +67,23 @@ the whole mechanism.
 
 ## Adoption Tracker
 
-| App repo | ChatGPT.md | CLAUDE.md | CODEX.md | AGENTS.md | Governance-sync lane |
+| Repo | ChatGPT.md | CLAUDE.md | CODEX.md | AGENTS.md | Governance-sync lane |
 |---|---|---|---|---|---|
 | `home-inventory-system` (CC-SILS) | pending | pre-1.0 (app-specific) | pending | pre-1.0 (app-specific) | pending |
 | `gpb-voice-generator` | pending | pre-1.0 (app-specific) | pending (has legacy `CODEX_REVIEW.md`) | pending | pending |
 | `gpb-storyteller` | pre-1.0 (org-generic — to be thinned) | pre-1.0 (app-specific) | pending | pre-1.0 (app-specific) | pending |
 | `cajuncraft-print-library` (CC-PL) | v1.0 | v1.0 | v1.0 | v1.0 | complete — bootstrapped at PL-001 (repo created 2026-07-07 with the full role-file set + handoff structure) |
+| `cajuncraft-infrastructure` (INFRA) | v1.0 | v1.0 | v1.0 | v1.0 | complete — bootstrapped at INFRA-EXTRACT-001 (repo created 2026-08-26 with the full role-file set + handoff structure) |
 
 Adoption PRs update their own row. "pre-1.0" marks a file that predates this
 versioned template set and is aligned during that repo's governance-sync lane.
+
+Not every repo in the table is an application. `cajuncraft-infrastructure`
+holds the shared services applications sit on — DNS, TLS, identity — and its
+role files instantiate the same templates, with two deviations recorded in
+its own `CLAUDE.md`: it has no DEV/TEST/PROD (infrastructure is either **live**
+or being **rehearsed** against a disposable copy), and its lane IDs are
+`INFRA-<AREA>-###` rather than a single product prefix.
 
 ## Adoption (per repo)
 
