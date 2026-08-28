@@ -74,6 +74,7 @@ the whole mechanism.
 | `gpb-storyteller` | pre-1.0 (org-generic — to be thinned) | pre-1.0 (app-specific) | pending | pre-1.0 (app-specific) | pending |
 | `cajuncraft-print-library` (CC-PL) | v1.0 | v1.0 | v1.0 | v1.0 | complete — bootstrapped at PL-001 (repo created 2026-07-07 with the full role-file set + handoff structure) |
 | `cajuncraft-infrastructure` (INFRA) | v1.0 | v1.0 | v1.0 | v1.0 | complete — bootstrapped at INFRA-EXTRACT-001 (repo created 2026-08-26 with the full role-file set + handoff structure) |
+| `cajuncraft-budget` (CC-BUD) | v1.0 | v1.0 | v1.0 | v1.0 | complete — bootstrapped at CC-BUD-001..005 (repo created 2026-08-21 with the full role-file set + handoff structure) |
 
 Adoption PRs update their own row. "pre-1.0" marks a file that predates this
 versioned template set and is aligned during that repo's governance-sync lane.
